@@ -21,15 +21,16 @@ enum ShapeBodyType : Int {
 
 
 class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDelegate  {
-    
-    
    
+    @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet var sceneView: ARSCNView!
     var player:AVAudioPlayer = AVAudioPlayer()
     var lastContactNode :SCNNode!
     var Target: SCNNode?
-    var scorecounter: Int?
-    
+    var timeCounter: Float = 0
+    var countingtimeBool = false
+    var timer = Timer()
+    //var scoreCounter: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +44,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         }
         player.play()
         
+
+        //Add timer and update label with time elapsed
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector (ViewController.startAction), userInfo: nil, repeats: true)
+        timeCounter += 1
+        timeLabel.text = String(timeCounter)
+        
+       
         
         // Set the view's delegate
         sceneView.delegate = self
@@ -132,20 +140,20 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         let material = SCNMaterial()
         material.diffuse.contents = UIColor.red
         self.lastContactNode.geometry?.materials = [material]
+
         contactNode.removeFromParentNode()
+        
     }
     
     
-    //
-    
-    
+    // When user taps the screen, fire laser beam
     private func registerGestureRecognizers() {
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(shoot))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(fireshot))
         self.sceneView.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    @objc func shoot(recognizer :UIGestureRecognizer) {
+    @objc func fireshot(recognizer :UIGestureRecognizer) {
         
         guard let currentFrame = self.sceneView.session.currentFrame else {
             return
@@ -182,11 +190,21 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         self.sceneView.scene.rootNode.addChildNode(laserNode)
     }
     
-    @IBAction func ExitButton(_ sender: UIButton) {
     
-     exit(0)
     
+    @objc func startAction(){
+        timeCounter += 1
+        timeLabel.text = "Time Played: " + String(timeCounter)
+        
     }
+
+
+
+    //Exit game if tapped
+    @IBAction func ExitButton(_ sender: UIButton) {
+     exit(0)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
