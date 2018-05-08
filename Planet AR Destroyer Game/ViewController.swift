@@ -13,12 +13,12 @@ import SceneKit
 import ARKit
 import AVFoundation
 
+
+
 enum ShapeBodyType : Int {
     case laserbeam = 1
     case planet = 2
 }
-
-
 
 class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDelegate  {
    
@@ -30,7 +30,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
     var timeCounter: Float = 0
     var countingtimeBool = false
     var timer = Timer()
-    //var scoreCounter: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,9 +53,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         
         // Set the view's delegate
         sceneView.delegate = self
-        
-        // Show statistics such as fps and timing information
-        sceneView.showsStatistics = true
         
         // Create a new scene
         let scene = SCNScene()
@@ -99,9 +95,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         
         
         //Place planets in 3D space using SCNVector
-        planet1Node.position = SCNVector3(0,0,-1.0)
+        planet1Node.position = SCNVector3(0.5,0,-4.0)
         planet2Node.position = SCNVector3(-0.8,-0.2,-3.0)
         planet3Node.position = SCNVector3(0.8,0.2,-2.0)
+        
+        
         
         // Set the scene to the view
         sceneView.scene = scene
@@ -141,12 +139,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         material.diffuse.contents = UIColor.red
         self.lastContactNode.geometry?.materials = [material]
 
+        //Removes node from view
         contactNode.removeFromParentNode()
         
     }
     
     
-    // When user taps the screen, fire laser beam
+    // When user taps the screen, fire laser beam projectile
     private func registerGestureRecognizers() {
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(fireshot))
@@ -160,17 +159,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         }
         
         var translation = matrix_identity_float4x4
-        translation.columns.3.z = -0.3
+        translation.columns.3.z = -0.2
         
         
         
         
-        //Create dimensions and attributes of laser beam
+        //Creates dimensions and attributes of laser beam
         
-        let laserBeam = SCNBox(width: 0.03, height: 0.03, length: 0.03, chamferRadius: 0)
+        let laserBeam = SCNBox(width: 0.02, height: 0.02, length: 0.04, chamferRadius: 0)
         
         let material = SCNMaterial()
-        material.diffuse.contents = UIColor.yellow
+        material.diffuse.contents = UIColor.red
         
         
         let laserNode = SCNNode(geometry: laserBeam)
@@ -182,8 +181,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         
         laserNode.simdTransform = matrix_multiply(currentFrame.camera.transform, translation)
         
-        //Define speed with which laser beam shoots and interacts with planets
-        
+        //Defines speed with which laser beam shoots and interacts with planets
         let forceVector = SCNVector3(laserNode.worldFront.x * 6,laserNode.worldFront.y * 6,laserNode.worldFront.z * 6)
         
         laserNode.physicsBody?.applyForce(forceVector, asImpulse: true)
@@ -191,14 +189,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
     }
     
     
-    
+    //Part of timer functionality, updates label with time elapsed
     @objc func startAction(){
         timeCounter += 1
         timeLabel.text = "Time Played: " + String(timeCounter)
         
     }
-
-
 
     //Exit game if tapped
     @IBAction func ExitButton(_ sender: UIButton) {
