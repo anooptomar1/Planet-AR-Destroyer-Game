@@ -1,19 +1,21 @@
+// Orion Choy
+// Final Project
+// SUNY Ulster
 //
-//  ViewController.swift
-//  Planet AR Destroyer Game
 //
-//  Created by Orion Choy on 5/7/18.
+//
+//
+//  Created by Orion Choy on 5/6/18.
 //  Copyright © 2018 Orion Choy. All rights reserved.
-//
 
 import UIKit
 import SceneKit
 import ARKit
 import AVFoundation
 
-enum BoxBodyType : Int {
-    case bullet = 1
-    case barrier = 2
+enum ShapeBodyType : Int {
+    case laserbeam = 1
+    case planet = 2
 }
 
 
@@ -26,17 +28,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
     var player:AVAudioPlayer = AVAudioPlayer()
     var lastContactNode :SCNNode!
     var Target: SCNNode?
+    var scorecounter: Int?
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         
+        
+        //play background music in background music folder
         do{
             let audioPath = Bundle.main.path(forResource: "01_Title Screen", ofType: "mp3")
             try player = AVAudioPlayer(contentsOf: NSURL(fileURLWithPath: audioPath!) as URL)
         }catch{
-            
-            
         }
         player.play()
         
@@ -52,15 +54,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         
         
         
-        
-        
-        
-        
-        
+        //Create 3 planets of type SCNSphere
         let planet1 = SCNSphere(radius: 0.1)
         let material = SCNMaterial()
         material.diffuse.contents = UIColor.blue
-        
         planet1.materials = [material]
         
         let planet2 = SCNSphere(radius: 0.1)
@@ -71,55 +68,53 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         let planet3 = SCNSphere(radius:0.1)
         let material3 = SCNMaterial()
         material3.diffuse.contents = UIColor.yellow
-        
         planet3.materials = [material3]
         
         
         
+        //Create nodes for each planet
         let planet1Node = SCNNode(geometry: planet1)
-        planet1Node.name = "Barrier1"
+        planet1Node.name = "Planet1"
         planet1Node.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
-        planet1Node.physicsBody?.categoryBitMask = BoxBodyType.barrier.rawValue
-        
+        planet1Node.physicsBody?.categoryBitMask = ShapeBodyType.planet.rawValue
         
         let planet2Node = SCNNode(geometry: planet2)
-        planet2Node.name = "Barrier2"
+        planet2Node.name = "Planet2"
         planet2Node.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
-        planet2Node.physicsBody?.categoryBitMask = BoxBodyType.barrier.rawValue
-        
+        planet2Node.physicsBody?.categoryBitMask = ShapeBodyType.planet.rawValue
         
         let planet3Node = SCNNode(geometry: planet3)
-        planet3Node.name = "Barrier3"
+        planet3Node.name = "Planet3"
         planet3Node.physicsBody = SCNPhysicsBody(type: .static, shape: nil)
-        planet3Node.physicsBody?.categoryBitMask = BoxBodyType.barrier.rawValue
+        planet3Node.physicsBody?.categoryBitMask = ShapeBodyType.planet.rawValue
         
+        
+        //Place planets in 3D space using SCNVector
         planet1Node.position = SCNVector3(0,0,-1.0)
         planet2Node.position = SCNVector3(-0.8,-0.2,-3.0)
         planet3Node.position = SCNVector3(0.8,0.2,-2.0)
         
+        // Set the scene to the view
+        sceneView.scene = scene
         
+        //add each planetNode to scene
         scene.rootNode.addChildNode(planet1Node)
         scene.rootNode.addChildNode(planet2Node)
         scene.rootNode.addChildNode(planet3Node)
         
-        
-        // Set the scene to the view
-        sceneView.scene = scene
-        
         self.sceneView.scene.physicsWorld.contactDelegate = self
-        
         registerGestureRecognizers()
     }
     
+    
+    //Function to define rules if laser beam comes in contact with Planet
     func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
         
         let nodeA = contact.nodeA
         
-        
-        
         var contactNode :SCNNode!
         
-        if nodeA.name == "Bullet" {
+        if nodeA.name == "Laser" {
             contactNode = contact.nodeB
         } else {
             contactNode = contact.nodeA
@@ -129,19 +124,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
             return
         }
         
-        self.lastContactNode = contactNode
         
+        //If laser beam comes in contact with planet, planet will change colors and disappear
+        
+        self.lastContactNode = contactNode
         let material = SCNMaterial()
         material.diffuse.contents = UIColor.red
-        
         self.lastContactNode.geometry?.materials = [material]
-        
-        contact.nodeB.removeFromParentNode()
-        
-        
-        
-        
+        contactNode.removeFromParentNode()
     }
+    
+    
+    //
+    
     
     private func registerGestureRecognizers() {
         
@@ -158,25 +153,32 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         var translation = matrix_identity_float4x4
         translation.columns.3.z = -0.3
         
-        let box = SCNBox(width: 0.03, height: 0.03, length: 0.03, chamferRadius: 0)
+        
+        
+        
+        //Create dimensions and attributes of laser beam
+        
+        let laserBeam = SCNBox(width: 0.03, height: 0.03, length: 0.03, chamferRadius: 0)
         
         let material = SCNMaterial()
         material.diffuse.contents = UIColor.yellow
         
-        let boxNode = SCNNode(geometry: box)
-        boxNode.name = "Bullet"
-        boxNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
-        boxNode.physicsBody?.categoryBitMask = BoxBodyType.bullet.rawValue
-        boxNode.physicsBody?.contactTestBitMask = BoxBodyType.barrier.rawValue
-        boxNode.physicsBody?.isAffectedByGravity = false
         
-        boxNode.simdTransform = matrix_multiply(currentFrame.camera.transform, translation)
+        let laserNode = SCNNode(geometry: laserBeam)
+        laserNode.name = "Laser"
+        laserNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+        laserNode.physicsBody?.categoryBitMask = ShapeBodyType.laserbeam.rawValue
+        laserNode.physicsBody?.contactTestBitMask = ShapeBodyType.planet.rawValue
+        laserNode.physicsBody?.isAffectedByGravity = false
         
-        let forceVector = SCNVector3(boxNode.worldFront.x * 8,boxNode.worldFront.y * 8,boxNode.worldFront.z * 8)
+        laserNode.simdTransform = matrix_multiply(currentFrame.camera.transform, translation)
         
-        boxNode.physicsBody?.applyForce(forceVector, asImpulse: true)
-        self.sceneView.scene.rootNode.addChildNode(boxNode)
+        //Define speed with which laser beam shoots and interacts with planets
         
+        let forceVector = SCNVector3(laserNode.worldFront.x * 6,laserNode.worldFront.y * 6,laserNode.worldFront.z * 6)
+        
+        laserNode.physicsBody?.applyForce(forceVector, asImpulse: true)
+        self.sceneView.scene.rootNode.addChildNode(laserNode)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -191,11 +193,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         // Pause the view's session
         sceneView.session.pause()
     }
-    
-    
 }
-
