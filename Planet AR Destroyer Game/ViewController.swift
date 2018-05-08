@@ -30,6 +30,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
     var Target: SCNNode?
     var scorecounter: Int?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -181,6 +182,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
         self.sceneView.scene.rootNode.addChildNode(laserNode)
     }
     
+    @IBAction func ExitButton(_ sender: UIButton) {
+    
+     exit(0)
+    
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
