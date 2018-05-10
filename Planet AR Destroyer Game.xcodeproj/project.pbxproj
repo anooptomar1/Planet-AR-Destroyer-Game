@@ -15,6 +15,8 @@
 		76A05A1620A0231A00F191ED /* backgroundwelcomescreen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 76A05A1520A0231A00F191ED /* backgroundwelcomescreen.jpg */; };
 		76A05A1820A0233600F191ED /* orionconstellation.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 76A05A1720A0233600F191ED /* orionconstellation.jpg */; };
 		76A05A1B20A0260F00F191ED /* 01_Title Screen.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 76A05A1A20A0260F00F191ED /* 01_Title Screen.mp3 */; };
+		76BD41E920A3C2F20002A9A6 /* moon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 76BD41E820A3C2F20002A9A6 /* moon.jpg */; };
+		76BD41EC20A3C5170002A9A6 /* mercury.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 76BD41EB20A3C5170002A9A6 /* mercury.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		76A05A1520A0231A00F191ED /* backgroundwelcomescreen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = backgroundwelcomescreen.jpg; sourceTree = "<group>"; };
 		76A05A1720A0233600F191ED /* orionconstellation.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = orionconstellation.jpg; sourceTree = "<group>"; };
 		76A05A1A20A0260F00F191ED /* 01_Title Screen.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "01_Title Screen.mp3"; sourceTree = "<group>"; };
+		76BD41E820A3C2F20002A9A6 /* moon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = moon.jpg; sourceTree = "<group>"; };
+		76BD41EB20A3C5170002A9A6 /* mercury.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercury.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +80,8 @@
 		76A05A1920A0240800F191ED /* BackgroundMusic */ = {
 			isa = PBXGroup;
 			children = (
+				76BD41E820A3C2F20002A9A6 /* moon.jpg */,
+				76BD41EB20A3C5170002A9A6 /* mercury.jpg */,
 				76A05A1A20A0260F00F191ED /* 01_Title Screen.mp3 */,
 			);
 			path = BackgroundMusic;
@@ -139,8 +145,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76BD41E920A3C2F20002A9A6 /* moon.jpg in Resources */,
 				76A05A1820A0233600F191ED /* orionconstellation.jpg in Resources */,
 				76A05A0E20A020A200F191ED /* LaunchScreen.storyboard in Resources */,
+				76BD41EC20A3C5170002A9A6 /* mercury.jpg in Resources */,
 				76A05A0B20A020A200F191ED /* Assets.xcassets in Resources */,
 				76A05A1B20A0260F00F191ED /* 01_Title Screen.mp3 in Resources */,
 				76A05A1620A0231A00F191ED /* backgroundwelcomescreen.jpg in Resources */,

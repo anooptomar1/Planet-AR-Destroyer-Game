@@ -60,7 +60,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1hf-8f-2BB">
                                 <rect key="frame" x="176" y="321" width="24" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button" image="Image"/>
+                                <state key="normal" title="scopesight" image="ScopeSight"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gQF-dz-3FJ">
                                 <rect key="frame" x="16" y="46" width="53" height="34"/>
@@ -98,7 +98,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Image" width="24" height="24"/>
+        <image name="ScopeSight" width="24" height="24"/>
         <image name="backgroundwelcomescreen.jpg" width="236" height="419"/>
     </resources>
 </document>
